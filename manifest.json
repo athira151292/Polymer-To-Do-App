@@ -1,0 +1,7 @@
+{
+  "name": "Polylogin",
+  "short_name": "Polylogin",
+  "description": "login and registration ",
+  "start_url": "/",
+  "display": "standalone"
+}
