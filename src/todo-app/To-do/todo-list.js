@@ -1,4 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import './todo-all-tasks.js';
+import './todo-completed.js';
 
 class ToDoList extends PolymerElement {
     static get properties() {
@@ -14,6 +16,10 @@ class ToDoList extends PolymerElement {
           },
           notify: true,
           reflectToAttribute: true
+        },
+        selected: {
+          type: Number,
+          value: 0
         }
       };
     }
@@ -26,25 +32,37 @@ class ToDoList extends PolymerElement {
               display: block;
               margin: 0 auto;
             }
+            ul {
+              padding: 0 30px;
+            }
             li {
               list-style-type: none;
+              padding: 10px;
+              border-bottom: 1px solid #e2dfdf;
+            }
+            li:last-of-type {
+              border-bottom: none;
             }
           </style>
           <paper-input type="text" placeholder="What needs to be done?" value="{{todo}}" on-keydown=_addTask id="task-input"></paper-input>
-          <dom-repeat items="{{task}}">
-            <template>
-              <ul>
-                <li>
-                  <paper-checkbox checked="{{item.completed}}"></paper-checkbox>
-                  <label>{{item.name}}</label>
-                </li>
-              </ul>
-            </template>
-          </dom-repeat>
-          <paper-tabs selected="0">
+          <ul>
+            <dom-repeat items="{{task}}">
+              <template>
+                  <li>
+                    <paper-checkbox checked="{{item.completed}}" on-change=_isCompleted></paper-checkbox>
+                    <label>{{item.name}}</label>
+                  </li>
+              </template>
+            </dom-repeat>
+          </ul>
+          <paper-tabs selected="{{selected}}">
             <paper-tab>All tasks</paper-tab>
             <paper-tab>Completed tasks</paper-tab>
           </paper-tabs>
+          <iron-pages selected="{{selected}}">
+            <todo-all></todo-all>
+            <todo-completed></todo-completed>
+          </iron-pages>
       `
     }
     constructor() {
@@ -63,8 +81,8 @@ class ToDoList extends PolymerElement {
     }
 
     _isCompleted(item) {
-      if(item.completed == true)
-        return item;
+      var taskStr = JSON.stringify(this.task);
+      localStorage.setItem('list', taskStr);
     }
 }
 

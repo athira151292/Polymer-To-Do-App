@@ -1,39 +1,49 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
-class ToDoAll extends PolymerElement {
-    static get properties() {
-        return {
-            task: {
-              type: Array,
-              value() {
-                return [
-                  {name: 'Task 1', completed: false}
-                ];
-              },
-              notify: true,
-              reflectToAttribute: true
+class ToDoCompleted extends PolymerElement {
+  static get properties() {
+    return {
+      item: {
+        type: Array,
+        value() {
+          var taskObj = JSON.parse(localStorage.getItem("list")),
+              arr = [];
+          if (taskObj != undefined) {
+            for(var i=0;i<taskObj.length;i++) {
+              if(taskObj[i].completed === true) {
+                arr.push(taskObj[i]);
+              }
             }
-        };
-    }
-    constructor() {
-        super();
+          return arr;
+          }
+          else
+            return [];
+        },
+        notify: true,
+        reflectToAttribute: true
       }
+    };
+  }
+  constructor() {
+    super();
+  }
 	static get template(){
 		return html `
-			<style>
+      <style>
+        li {
+          list-style-type: none;
+          padding: 10px;
+        }
       </style>
-      <dom-repeat items="{{task}}">
-            <template>
-            <ul>
-                <li>
-                <paper-checkbox checked="{{item.completed}}" on-change="_completeTask"></paper-checkbox>
-                <label>{{item.name}}</label>
-                </li>
-            </ul>
-            </template>
-        </dom-repeat>
+      <ul>
+      <dom-repeat items="{{item}}">
+        <template>
+          <li>{{item.name}}</li>
+        </template>
+      </dom-repeat>
+      </ul>
 		`
 	}
 }
 
-window.customElements.define('todo-all', ToDoAll);
+window.customElements.define('todo-completed', ToDoCompleted);

@@ -28,40 +28,6 @@ class ToDoApp extends PolymerElement {
 
     `;
   }
-  // static get properties() {
-  //   return {
-  //     page: {
-  //       type: String,
-  //       observer: '_pageChanged'
-  //     }
-  //   };
-  // }
-
-
-  _pageChanged(currentPage, oldPage){
-    // switch(currentPage){
-    //   case 'login':
-    //   import('./Login/login-view.js').then()
-    //   break;
-    // case 'signup':
-    //   import('./Login/signup-view.js').then()
-    //   break; 
-    // case 'todo-list':
-    //   import('./To-do/todo-list.js').then()
-    //   break;      
-    // default:
-    //   this.page = 'login';
-    // }
-  }
-
-
-  static get observers(){
-    // return ['_routerChanged(routeData.page)'];
-  }
-
-  _routerChanged(page){
-    // this.page = page || 'login';
-  }
 
 }
 
