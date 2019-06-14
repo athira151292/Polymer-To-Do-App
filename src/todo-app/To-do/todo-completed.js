@@ -1,29 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
 class ToDoCompleted extends PolymerElement {
-  static get properties() {
-    return {
-      item: {
-        type: Array,
-        value() {
-          var taskObj = JSON.parse(localStorage.getItem("list")),
-              arr = [];
-          if (taskObj != undefined) {
-            for(var i=0;i<taskObj.length;i++) {
-              if(taskObj[i].completed === true) {
-                arr.push(taskObj[i]);
-              }
-            }
-          return arr;
-          }
-          else
-            return [];
-        },
-        notify: true,
-        reflectToAttribute: true
-      }
-    };
-  }
   constructor() {
     super();
   }
@@ -36,11 +13,11 @@ class ToDoCompleted extends PolymerElement {
         }
       </style>
       <ul>
-      <dom-repeat items="{{item}}">
-        <template>
-          <li>{{item.name}}</li>
+        <template is="dom-repeat" items="{{task}}">
+          <template is="dom-if" if="{{item.completed}}">
+            <li>{{item.name}}</li>
+          </template>
         </template>
-      </dom-repeat>
       </ul>
 		`
 	}

@@ -60,8 +60,8 @@ class ToDoList extends PolymerElement {
             <paper-tab>Completed tasks</paper-tab>
           </paper-tabs>
           <iron-pages selected="{{selected}}">
-            <todo-all></todo-all>
-            <todo-completed></todo-completed>
+            <todo-all task={{task}}></todo-all>
+            <todo-completed task={{task}}></todo-completed>
           </iron-pages>
       `
     }
