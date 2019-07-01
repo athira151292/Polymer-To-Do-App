@@ -21,6 +21,9 @@ class ToDoApp extends PolymerElement {
       <style>
         :host {
           display: block;
+          --paper-checkbox-size: 20px;
+          --paper-checkbox-checked-color: #538cc6;
+          --paper-tab-ink: #b3cce6;
         }
       </style>
 

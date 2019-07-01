@@ -39,18 +39,45 @@ class ToDoList extends PolymerElement {
               list-style-type: none;
               padding: 10px;
               border-bottom: 1px solid #e2dfdf;
+              position: relative;
             }
             li:last-of-type {
               border-bottom: none;
             }
+            .delete-item:after {
+              content: "x";
+              font-size: 17px;
+              color: #a11717;
+            }
+            .delete-item {
+              background: none;
+              border: none;
+              position: absolute;
+              right: 0;
+              cursor: pointer;
+              opacity: 0.5;
+            }
+            .delete-item:hover,
+            .delete-item:active,
+            .delete-item:focus {
+              opacity: 1;
+            }
+            paper-tab {
+              background: #dcdcdc;
+            }
+            paper-tab.iron-selected {
+              background: #538cc6;
+              color: #fff;
+            }
+
           </style>
           <paper-input type="text" placeholder="What needs to be done?" value="{{todo}}" on-keydown=_addTask id="task-input"></paper-input>
           <ul>
             <dom-repeat items="{{task}}">
               <template>
                   <li>
-                    <paper-checkbox checked="{{item.completed}}" on-change=_isCompleted></paper-checkbox>
-                    <label>{{item.name}}</label>
+                    <paper-checkbox checked="{{item.completed}}" on-change=_isCompleted><label data-id$={{item.id}}>{{item.name}}</label></paper-checkbox>
+                    <button class="delete-item" on-click=_deleteTask></button>
                   </li>
               </template>
             </dom-repeat>
@@ -69,9 +96,17 @@ class ToDoList extends PolymerElement {
       super();
     }
     _addTask(e) {
+      
       if(e.keyCode == 13) {
+        var taskObj = JSON.parse(localStorage.getItem("list")),
+            taskLength = taskObj.length,
+            id = 0;
+        if(taskLength != undefined && taskLength != 0) {
+            var id = taskObj[taskLength-1].id;
+            id++;
+        }
         var todo = this.todo,
-            obj = {'name':todo,'completed':false};
+            obj = {'name':todo,'completed':false, 'id':id};
         this.push('task', obj);
         e.target.value = "";
         var taskStr = JSON.stringify(this.task);
@@ -80,9 +115,35 @@ class ToDoList extends PolymerElement {
       }
     }
 
-    _isCompleted(item) {
+    _isCompleted(e) {
       var taskStr = JSON.stringify(this.task);
       localStorage.setItem('list', taskStr);
+    }
+
+    _deleteTask(e) {
+      var elementId = e.target.previousElementSibling.firstElementChild.getAttribute("data-id"),
+          taskObj = JSON.parse(localStorage.getItem("list")),
+          taskLength = taskObj.length;
+      for(var i=0;i<taskLength;i++) {
+        if(taskObj[i].id == elementId) {
+          taskObj.splice(i,1);
+          break;
+        } 
+      }
+      var taskStr = JSON.stringify(taskObj);
+      localStorage.setItem('list', taskStr);
+      var temp = [],
+          tempLength = this.task.length;
+      temp = temp.concat(this.task);
+      for(var j=0;j<tempLength;j++) {
+        if(temp[j].id == elementId) {
+          temp.splice(j,1);
+          break;
+        }
+      }
+      this.task = [];
+      this.task = this.task.concat(temp);
+      
     }
 }
 
